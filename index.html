@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FRESHLY & PREMIER - Digital Menu</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root {
+    --bg-dark: #0c0e13;
+    --bg-panel: #151922;
+    --bg-card: #1c212d;
+    --bg-input: #10131a;
+    --gold-light: #fcf6ba;
+    --gold-main: #d4af37;
+    --gold-dark: #aa771c;
+    --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 30%, #d4af37 55%, #fbf5b7 80%, #aa771c 100%);
+    --border-gold: rgba(212, 175, 55, 0.35);
+    --border-subtle: #2a303f;
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+    --success: #10b981;
+    --danger: #ef4444;
+    --radius: 12px;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: #07080b;
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .phone-frame {
+    width: 100%;
+    max-width: 430px;
+    height: 94vh;
+    max-height: 870px;
+    background: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,0,0,0.9);
+    border: 1px solid var(--border-gold);
+    border-radius: 24px;
+  }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+
+  /* Header */
+  .app-header {
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 8px 12px;
+    flex-shrink: 0;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .brand-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .brand-logo-wrap svg, .brand-logo-wrap img {
+    height: 36px;
+    width: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-gold);
+    display: block;
+  }
+
+  .brand-title {
+    font-size: 0.95rem;
+    font-weight: 900;
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.5px;
+  }
+
+  .brand-sub {
+    font-size: 0.58rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .selector-pill {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-gold);
+    padding: 4px 6px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+  }
+
+  .selector-pill select {
+    background: transparent;
+    color: var(--gold-light);
+    border: none;
+    font-weight: 700;
+    font-size: 0.72rem;
+    outline: none;
+    cursor: pointer;
+  }
+  .selector-pill select option { background: var(--bg-panel); color: var(--text-main); }
+
+  /* Permanent QR Banner Widget */
+  .permanent-qr-bar {
+    background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(28,33,45,0.9));
+    border-bottom: 1px solid var(--border-gold);
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .permanent-qr-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .permanent-qr-thumb {
+    background: #fff;
+    padding: 3px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gold-main);
+  }
+  #permanentQrcode img { display: block; width: 34px !important; height: 34px !important; }
+
+  /* Main Workspace */
+  .main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .input-field {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    padding: 7px 10px;
+    border-radius: 9px;
+    font-size: 0.82rem;
+    outline: none;
+  }
+  .input-field:focus { border-color: var(--gold-main); }
+
+  .category-strip {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    flex-shrink: 0;
+  }
+
+  .cat-chip {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .cat-chip.active {
+    background: var(--gold-gradient);
+    color: #0b0d12;
+    border-color: transparent;
+  }
+
+  /* Items Grid */
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    overflow-y: auto;
+    flex: 1;
+    padding-bottom: 8px;
+  }
+
+  .item-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 11px;
+    padding: 7px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    transition: transform 0.12s;
+  }
+  .item-card:active { transform: scale(0.97); }
+  .item-card.special-item {
+    border: 1.5px solid var(--gold-main);
+    background: linear-gradient(180deg, rgba(212,175,55,0.14) 0%, var(--bg-card) 100%);
+  }
+
+  .special-ribbon {
+    position: absolute;
+    top: 5px;
+    inset-inline-start: 5px;
+    background: var(--gold-gradient);
+    color: #000;
+    font-size: 0.6rem;
+    font-weight: 900;
+    padding: 1px 6px;
+    border-radius: 5px;
+    z-index: 2;
+  }
+
+  .item-thumb {
+    width: 100%;
+    height: 76px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #10131a;
+    margin-bottom: 5px;
+  }
+  .item-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .item-name {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4px;
+    line-height: 1.25;
+  }
+
+  .item-price-tag {
+    text-align: center;
+    font-weight: 900;
+    font-size: 0.82rem;
+    color: var(--gold-main);
+    background: rgba(0,0,0,0.4);
+    padding: 3px 6px;
+    border-radius: 6px;
+  }
+
+  /* Cart Panel */
+  .cart-panel {
+    background: var(--bg-panel);
+    border-top: 1px solid var(--border-gold);
+    border-radius: 14px 14px 0 0;
+    padding: 9px 10px;
+    flex-shrink: 0;
+  }
+
+  .cart-list {
+    max-height: 85px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 6px;
+  }
+
+  .cart-empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 8px;
+    font-size: 0.78rem;
+  }
+
+  .cart-row {
+    background: var(--bg-card);
+    border-radius: 8px;
+    padding: 5px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.76rem;
+  }
+
+  .qty-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-input);
+    color: var(--text-main);
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .cart-extras {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .cart-extras label {
+    display: block;
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+  .cart-extras input {
+    padding: 5px 8px;
+    font-size: 0.78rem;
+  }
+
+  .totals-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 900;
+    font-size: 0.92rem;
+    color: var(--gold-main);
+    margin-bottom: 7px;
+    padding-top: 4px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .btn {
+    padding: 9px 10px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .btn-gold { background: var(--gold-gradient); color: #0b0d12; width: 100%; }
+  .btn-dark { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-subtle); }
+
+  /* Bottom Navigation Bar */
+  .nav-bar {
+    background: var(--bg-panel);
+    border-top: 1px solid var(--border-gold);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 6px 14px 6px;
+    flex-shrink: 0;
+    z-index: 100;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
+  }
+
+  .nav-btn {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    padding: 6px 10px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .nav-btn.active { color: var(--gold-main); }
+
+  /* Modal */
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--gold-main);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 340px;
+    padding: 16px;
+    text-align: center;
+  }
+  #modalQrcode {
+    background: #fff;
+    padding: 12px;
+    display: inline-block;
+    border-radius: 10px;
+    margin: 10px 0;
+  }
+
+  /* Toast */
+  .toast-banner {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold-gradient);
+    color: #0b0d12;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 900;
+    font-size: 0.8rem;
+    z-index: 999;
+    display: none;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+    white-space: nowrap;
+  }
+  .toast-banner.show { display: flex; }
+</style>
+</head>
+<body>
+
+  <div class="phone-frame">
+    <div id="toastBanner" class="toast-banner"><span id="toastText">تم التنفيذ بنجاح!</span></div>
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="brand-box">
+          <div id="headerLogoContainer" class="brand-logo-wrap"></div>
+          <div>
+            <div class="brand-title">FRESHLY &amp; PREMIER</div>
+            <div class="brand-sub">PREMIER BEVERIDGE CO</div>
+          </div>
+        </div>
+
+        <div class="header-controls">
+          <div class="selector-pill" title="Language">
+            <span>🌐</span>
+            <select id="langSelect">
+              <option value="ar">🇪🇬 AR</option>
+              <option value="en">🇬🇧 EN</option>
+              <option value="de">🇩🇪 DE</option>
+              <option value="fr">🇫🇷 FR</option>
+              <option value="ru">🇷🇺 RU</option>
+            </select>
+          </div>
+          <div class="selector-pill" title="Currency">
+            <span>💱</span>
+            <select id="currencySelect">
+              <option value="EGP">🇪🇬 EGP</option>
+              <option value="EUR">🇪🇺 EUR</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Permanent Prominent QR Banner Widget -->
+    <div class="permanent-qr-bar">
+      <div class="permanent-qr-info">
+        <div class="permanent-qr-thumb" id="permanentQrThumb" onclick="openQRModal()" title="انقر لعرض الباركود بالحجم الكامل">
+          <div id="permanentQrcode"></div>
+        </div>
+        <div>
+          <div style="font-size:0.76rem; font-weight:800; color:var(--gold-light);" data-i18n="qrBannerTitle">📱 باركود المنيو السريع</div>
+          <div style="font-size:0.62rem; color:var(--text-muted);" data-i18n="qrBannerSub">امسح الكود بكاميرا الهاتف للمشاركة والطلب</div>
+        </div>
+      </div>
+      <button class="btn btn-dark" style="padding:4px 9px; font-size:0.7rem;" onclick="openQRModal()" data-i18n="qrShowBtn">عرض الكود</button>
+    </div>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      <div>
+        <input type="text" id="menuSearchInput" class="input-field" data-i18n-placeholder="searchPlaceholder" placeholder="ابحث عن مشروب أو صنف...">
+      </div>
+      <div id="menuCategoryStrip" class="category-strip"></div>
+      <div id="menuItemsGrid" class="items-grid"></div>
+
+      <!-- Cart Panel -->
+      <div class="cart-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+          <span style="font-size:0.82rem; font-weight:800; color:var(--gold-main);" data-i18n="cartTitle">سلة الطلبات</span>
+        </div>
+        <div style="margin-bottom:6px;">
+          <label style="display:block; font-size:0.68rem; color:var(--gold-light); margin-bottom:2px; font-weight:700;" data-i18n="tableLabel">📍 رقم الطاولة أو الغرفة (إلزامي):</label>
+          <input type="text" id="customerTableInput" class="input-field" style="border: 1.5px solid var(--gold-main); background: rgba(212,175,55,0.08); font-weight:700;" data-i18n-placeholder="tablePlaceholder" placeholder="أدخل رقم الطاولة أو الغرفة هنا...">
+        </div>
+
+        <div id="cartItemsList" class="cart-list"></div>
+
+        <div class="cart-extras">
+          <div>
+            <label data-i18n="orderDateLabel">تاريخ الطلب</label>
+            <input type="date" id="orderDateInput" class="input-field">
+          </div>
+          <div>
+            <label data-i18n="itemsCountLabel">عدد الأصناف</label>
+            <input type="text" id="cartItemsCountDisplay" class="input-field" value="0 صنف" readonly style="font-weight:800; color:var(--gold-main);">
+          </div>
+        </div>
+
+        <div class="totals-row">
+          <span data-i18n="grandTotalLabel">الإجمالي النهائي:</span>
+          <span id="grandTotalDisplay">0 EGP</span>
+        </div>
+
+        <button id="sendOrderBtn" class="btn btn-gold" data-i18n="sendOrderBtn">🚀 إرسال الطلب للكاشير</button>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="nav-bar">
+      <button class="nav-btn active" onclick="openQRModal()"><span style="font-size:1.15rem;">📱</span><span data-i18n="navQr">الباركود</span></button>
+<button class="nav-btn" onclick="window.location.href='system.html'"><span style="font-size:1.15rem;">🧾</span><span data-i18n="navPos">لوحة الكاشير</span></button>
+    </nav>
+
+    <!-- QR Modal -->
+    <div id="qrModal" class="modal-backdrop" onclick="closeQRModal()">
+      <div class="modal-card" onclick="event.stopPropagation()">
+        <h3 style="color:var(--gold-main); font-size:0.95rem; margin-bottom:8px;" data-i18n="qrModalTitle">باركود المنيو للعملاء</h3>
+        <div id="modalQrcode"></div>
+        <p style="color:var(--text-muted); font-size:0.75rem; margin-top:8px;" data-i18n="qrModalDesc">امسح الكود بكاميرا الهاتف لتصفح المنيو والطلب فوراً</p>
+        <button class="btn btn-dark" style="width:100%; margin-top:12px;" onclick="closeQRModal()" data-i18n="closeBtn">إغلاق</button>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const todayStr = new Date().toISOString().split('T')[0];
+  document.getElementById('orderDateInput').value = todayStr;
+
+  const I18N = {
+    ar: {
+      searchPlaceholder: "ابحث عن مشروب أو صنف...",
+      allCategories: "الكل",
+      cartTitle: "سلة الطلبات",
+      tableLabel: "📍 رقم الطاولة أو الغرفة (إلزامي):",
+      tablePlaceholder: "أدخل رقم الطاولة أو الغرفة هنا...",
+      orderDateLabel: "تاريخ الطلب",
+      itemsCountLabel: "عدد الأصناف",
+      grandTotalLabel: "الإجمالي النهائي:",
+      sendOrderBtn: "🚀 إرسال الطلب للكاشير",
+      emptyCart: "السلة فارغة — اضغط على الصنف للإضافة",
+      qrBannerTitle: "📱 باركود المنيو السريع",
+      qrBannerSub: "امسح الكود بكاميرا الهاتف للمشاركة والطلب",
+      qrShowBtn: "عرض الكود",
+      navQr: "الباركود",
+      navPos: "لوحة الكاشير",
+      qrModalTitle: "باركود المنيو للعملاء",
+      qrModalDesc: "امسح الكود بكاميرا الهاتف لتصفح المنيو والطلب فوراً",
+      closeBtn: "إغلاق",
+      alertEmptyCart: "السلة فارغة!",
+      alertNoTable: "⚠️ يرجى إدخال رقم الطاولة أو الغرفة قبل إرسال الطلب!",
+      alertSuccess: "تم إرسال الطلب بنجاح إلى الكاشير! 🚀"
+    },
+    en: {
+      searchPlaceholder: "Search drinks or items...",
+      allCategories: "All",
+      cartTitle: "Cart",
+      tableLabel: "📍 Table or Room # (Required):",
+      tablePlaceholder: "Enter table or room number...",
+      orderDateLabel: "Order Date",
+      itemsCountLabel: "Items Count",
+      grandTotalLabel: "Grand Total:",
+      sendOrderBtn: "🚀 Send Order to Cashier",
+      emptyCart: "Cart is empty — tap item to add",
+      qrBannerTitle: "📱 Quick Menu QR",
+      qrBannerSub: "Scan with your camera to browse and order",
+      qrShowBtn: "Show QR",
+      navQr: "QR Code",
+      navPos: "POS Cashier",
+      qrModalTitle: "Customer Menu QR",
+      qrModalDesc: "Scan with your camera to browse and order instantly",
+      closeBtn: "Close",
+      alertEmptyCart: "Cart is empty!",
+      alertNoTable: "⚠️ Please enter table or room number before sending order!",
+      alertSuccess: "Order sent successfully to cashier! 🚀"
+    },
+    de: {
+      searchPlaceholder: "Getränk suchen...",
+      allCategories: "Alle",
+      cartTitle: "Warenkorb",
+      tableLabel: "📍 Tisch- oder Zimmernummer (Erforderlich):",
+      tablePlaceholder: "Tisch- oder Zimmernummer eingeben...",
+      orderDateLabel: "Bestelldatum",
+      itemsCountLabel: "Artikelanzahl",
+      grandTotalLabel: "Gesamtsumme:",
+      sendOrderBtn: "🚀 Bestellung an Kasse senden",
+      emptyCart: "Warenkorb ist leer — Artikel antippen",
+      qrBannerTitle: "📱 Menü QR-Code",
+      qrBannerSub: "Mit Kamera scannen zum Bestellen",
+      qrShowBtn: "QR anzeigen",
+      navQr: "QR-Code",
+      navPos: "Kasse",
+      qrModalTitle: "Menü QR-Code",
+      qrModalDesc: "Scannen Sie mit der Kamera zum Bestellen",
+      closeBtn: "Schließen",
+      alertEmptyCart: "Warenkorb ist leer!",
+      alertNoTable: "⚠️ Bitte geben Sie die Tisch- oder Zimmernummer ein!",
+      alertSuccess: "Bestellung erfolgreich an die Kasse gesendet! 🚀"
+    },
+    fr: {
+      searchPlaceholder: "Rechercher...",
+      allCategories: "Tout",
+      cartTitle: "Panier",
+      tableLabel: "📍 Numéro de table ou chambre (Requis) :",
+      tablePlaceholder: "Entrer le numéro...",
+      orderDateLabel: "Date de commande",
+      itemsCountLabel: "Nombre d'articles",
+      grandTotalLabel: "Total général :",
+      sendOrderBtn: "🚀 Envoyer la commande",
+      emptyCart: "Panier vide — touchez un article",
+      qrBannerTitle: "📱 QR Code du Menu",
+      qrBannerSub: "Scannez pour parcourir et commander",
+      qrShowBtn: "Afficher",
+      navQr: "QR Code",
+      navPos: "Caisse",
+      qrModalTitle: "QR Code du Menu",
+      qrModalDesc: "Scannez avec votre caméra pour commander instantanément",
+      closeBtn: "Fermer",
+      alertEmptyCart: "Le panier est vide !",
+      alertNoTable: "⚠️ Veuillez entrer le numéro de table ou chambre !",
+      alertSuccess: "Commande envoyée avec succès à la caisse ! 🚀"
+    },
+    ru: {
+      searchPlaceholder: "Поиск напитка...",
+      allCategories: "Все",
+      cartTitle: "Корзина",
+      tableLabel: "📍 Номер стола или комнаты (Обязательно):",
+      tablePlaceholder: "Введите номер стола или комнаты...",
+      orderDateLabel: "Дата заказа",
+      itemsCountLabel: "Количество",
+      grandTotalLabel: "Итого:",
+      sendOrderBtn: "🚀 Отправить заказ кассиру",
+      emptyCart: "Корзина пуста — нажмите на товар",
+      qrBannerTitle: "📱 QR код Меню",
+      qrBannerSub: "Сканируйте камерой для заказа",
+      qrShowBtn: "Показать QR",
+      navQr: "QR код",
+      navPos: "Касса",
+      qrModalTitle: "QR код Меню",
+      qrModalDesc: "Сканируйте камерой телефона для быстрого заказа",
+      closeBtn: "Закрыть",
+      alertEmptyCart: "Корзина пуста!",
+      alertNoTable: "⚠️ Пожалуйста, введите номер стола или комнаты!",
+      alertSuccess: "Заказ успешно отправлен кассиру! 🚀"
+    }
+  };
+
+  const DEFAULT_CATEGORIES = [
+    { id: 'milkshake', names: { ar: 'ميلك شيك', en: 'Milkshake', de: 'Milchshake', fr: 'Milkshake', ru: 'Милкшейк' } },
+    { id: 'iced_coffee', names: { ar: 'آيس كوفي', en: 'Iced Coffee', de: 'Eiskaffee', fr: 'Café Glacé', ru: 'Айс Кофе' } },
+    { id: 'fresh_juice', names: { ar: 'عصائر فريش', en: 'Fresh Juices', de: 'Frische Säfte', fr: 'Jus Frais', ru: 'Свежие соки' } },
+    { id: 'fruit_platters', names: { ar: 'اطباق فاكهة فريش', en: 'Fruit Platters', de: 'Obstteller', fr: 'Assiettes Fruits', ru: 'Фруктовые тарелки' } },
+    { id: 'matcha', names: { ar: 'الماتشا', en: 'Matcha', de: 'Matcha', fr: 'Matcha', ru: 'Матча' } },
+    { id: 'frappe', names: { ar: 'فرابيه', en: 'Frappe', de: 'Frappé', fr: 'Frappé', ru: 'Фраппе' } },
+    { id: 'iced_tea', names: { ar: 'آيس تي', en: 'Iced Tea', de: 'Eistee', fr: 'Thé Glacé', ru: 'Айс Ти' } },
+    { id: 'smoothie', names: { ar: 'سموزي', en: 'Smoothie', de: 'Smoothie', fr: 'Smoothie', ru: 'Смузи' } },
+    { id: 'mojito', names: { ar: 'موهيتو', en: 'Mojito', de: 'Mojito', fr: 'Mojito', ru: 'Мохито' } },
+    { id: 'hot_drinks', names: { ar: 'مشروبات ساخنة', en: 'Hot Drinks', de: 'Heißgetränke', fr: 'Boissons Chaudes', ru: 'Горячие напитки' } },
+    { id: 'soft_drinks', names: { ar: 'سوفت درينكس', en: 'Soft Drinks', de: 'Softdrinks', fr: 'Boissons Fraîches', ru: 'Напитки' } },
+    { id: 'asian_drinks', names: { ar: 'مشروبات آسيوية', en: 'Asian Drinks', de: 'Asiatisch', fr: 'Asiatique', ru: 'Азиатские напитки' } },
+    { id: 'energy', names: { ar: 'الطاقة والانتعاش', en: 'Energy & Refreshment', de: 'Energie', fr: 'Énergie', ru: 'Энергия' } }
+  ];
+
+  function makeDrinkImage(label, accent = '#d4af37') {
+    const clean = String(label || 'Drink').replace(/[<>&'"]/g, '').substring(0, 18);
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="220" height="140" viewBox="0 0 220 140">
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#1e2433"/>
+          <stop offset="100%" stop-color="#0f1219"/>
+        </linearGradient>
+      </defs>
+      <rect width="220" height="140" fill="url(#bg)"/>
+      <circle cx="110" cy="54" r="32" fill="${accent}" opacity="0.18"/>
+      <path d="M94 34 L126 34 L121 76 L99 76 Z" fill="${accent}" opacity="0.35" stroke="${accent}" stroke-width="2.5"/>
+      <path d="M110 34 L117 18 L128 15" fill="none" stroke="${accent}" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse cx="110" cy="34" rx="16" ry="3.5" fill="${accent}" opacity="0.7"/>
+      <text x="110" y="112" fill="#f8fafc" font-family="sans-serif" font-size="13" font-weight="bold" text-anchor="middle">${clean}</text>
+    </svg>`;
+    return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+  }
+
+  function getStoredCategories() {
+    try {
+      const s = JSON.parse(localStorage.getItem('fp_categories_v3') || localStorage.getItem('fp_menu_data_v1'));
+      if (Array.isArray(s) && s.length > 0) return s;
+      if (s && Array.isArray(s.categories)) return s.categories;
+    } catch(e) {}
+    return DEFAULT_CATEGORIES;
+  }
+
+  function getStoredItems() {
+    try {
+      const s = JSON.parse(localStorage.getItem('fp_items_v3'));
+      if (Array.isArray(s) && s.length > 0) return s;
+      const m = JSON.parse(localStorage.getItem('fp_menu_data_v1'));
+      if (m && Array.isArray(m.items)) return m.items;
+    } catch(e) {}
+    return [];
+  }
+
+  let menuState = {
+    lang: localStorage.getItem('fp_lang') || 'ar',
+    currency: localStorage.getItem('fp_currency') || 'EGP',
+    categories: getStoredCategories(),
+    items: getStoredItems(),
+    cart: [],
+    selectedCat: 'all',
+    searchQuery: '',
+    customLogo: localStorage.getItem('fp_custom_logo') || null
+  };
+
+  function t(key) {
+    return (I18N[menuState.lang] && I18N[menuState.lang][key]) || I18N.ar[key] || key;
+  }
+
+  function applyTranslations() {
+    const isRtl = menuState.lang === 'ar';
+    document.documentElement.lang = menuState.lang;
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const k = el.getAttribute('data-i18n');
+      if (t(k)) el.textContent = t(k);
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const k = el.getAttribute('data-i18n-placeholder');
+      if (t(k)) el.placeholder = t(k);
+    });
+  }
+
+  function renderLogos() {
+    const defaultLogo = `<svg viewBox="0 0 220 84" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="g3d" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#aa771c"/><stop offset="30%" stop-color="#fcf6ba"/>
+      <stop offset="60%" stop-color="#d4af37"/><stop offset="100%" stop-color="#996515"/></linearGradient></defs>
+      <rect width="220" height="84" rx="10" fill="#151922"/>
+      <text x="24" y="60" font-family="Georgia, serif" font-weight="900" font-size="34" fill="url(#g3d)">FRESHLY</text>
+      <text x="95" y="73" font-family="sans-serif" font-weight="800" font-size="8" letter-spacing="1" fill="url(#g3d)">PREMIER BEVERIDGE CO</text>
+    </svg>`;
+    const html = menuState.customLogo ? `<img src="${menuState.customLogo}" alt="Logo">` : defaultLogo;
+    document.getElementById('headerLogoContainer').innerHTML = html;
+  }
+
+  function renderQRWidgets() {
+    const permDiv = document.getElementById('permanentQrcode');
+    permDiv.innerHTML = '';
+    new QRCode(permDiv, {
+      text: window.location.href,
+      width: 34,
+      height: 34,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  }
+
+  function getItemTitle(item) {
+    if (!item) return '';
+    if (item.names) return item.names[menuState.lang] || item.names.ar || item.names.en || '';
+    return item.name || '';
+  }
+
+  function getCatTitle(cat) {
+    if (!cat) return '';
+    if (cat.names) return cat.names[menuState.lang] || cat.names.ar || cat.names.en || '';
+    return cat.name || '';
+  }
+
+  function getUnitPrice(item) {
+    if (!item) return 0;
+    return menuState.currency === 'EGP' ? Number(item.priceEGP || 300) : Number(item.priceEUR || 5);
+  }
+
+  function formatMoney(amount) {
+    const num = Number(amount || 0);
+    const clean = Number.isInteger(num) ? num.toString() : num.toFixed(2);
+    return menuState.currency === 'EGP' ? `${clean} EGP` : `${clean} €`;
+  }
+
+  function renderCategories() {
+    const strip = document.getElementById('menuCategoryStrip');
+    let html = `<button class="cat-chip ${menuState.selectedCat === 'all' ? 'active' : ''}" data-cat="all">${t('allCategories')}</button>`;
+    menuState.categories.forEach(c => {
+      html += `<button class="cat-chip ${menuState.selectedCat === c.id ? 'active' : ''}" data-cat="${c.id}">${getCatTitle(c)}</button>`;
+    });
+    strip.innerHTML = html;
+
+    strip.querySelectorAll('.cat-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        menuState.selectedCat = btn.getAttribute('data-cat');
+        renderCategories();
+        renderItems();
+      });
+    });
+  }
+
+  function renderItems() {
+    const grid = document.getElementById('menuItemsGrid');
+    const q = menuState.searchQuery.trim().toLowerCase();
+    const filtered = menuState.items.filter(item => {
+      const matchCat = menuState.selectedCat === 'all' || item.categoryId === menuState.selectedCat;
+      const title = getItemTitle(item).toLowerCase();
+      const matchQ = !q || title.includes(q);
+      return matchCat && matchQ;
+    });
+
+    grid.innerHTML = filtered.map(item => `
+      <div class="item-card ${item.special ? 'special-item' : ''}" data-id="${item.id}">
+        ${item.special ? `<span class="special-ribbon">★ مميز</span>` : ''}
+        <div class="item-thumb">
+          <img src="${item.image || makeDrinkImage(getItemTitle(item))}" alt="">
+        </div>
+        <div class="item-name">${getItemTitle(item)}</div>
+        <div class="item-price-tag">${formatMoney(getUnitPrice(item))}</div>
+      </div>
+    `).join('');
+
+    grid.querySelectorAll('.item-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.getAttribute('data-id');
+        const ex = menuState.cart.find(c => c.itemId === id);
+        if (ex) ex.qty += 1;
+        else menuState.cart.push({ itemId: id, qty: 1 });
+        renderCart();
+      });
+    });
+  }
+
+  function renderCart() {
+    const list = document.getElementById('cartItemsList');
+    const totalItems = menuState.cart.reduce((a, b) => a + b.qty, 0);
+    document.getElementById('cartItemsCountDisplay').value = `${totalItems} صنف`;
+
+    if (menuState.cart.length === 0) {
+      list.innerHTML = `<div class="cart-empty">${t('emptyCart')}</div>`;
+      document.getElementById('grandTotalDisplay').textContent = formatMoney(0);
+      return;
+    }
+
+    let subtotal = 0;
+    list.innerHTML = menuState.cart.map(c => {
+      const item = menuState.items.find(i => i.id === c.itemId);
+      if (!item) return '';
+      const unit = getUnitPrice(item);
+      subtotal += unit * c.qty;
+      return `
+        <div class="cart-row">
+          <span style="font-weight:700;">${getItemTitle(item)}</span>
+          <div style="display:flex; align-items:center; gap:5px;">
+            <span style="color:var(--gold-main); font-weight:800;">${formatMoney(unit * c.qty)}</span>
+            <button class="qty-btn" data-act="dec" data-id="${c.itemId}">-</button>
+            <span style="font-weight:800; min-width:14px; text-align:center;">${c.qty}</span>
+            <button class="qty-btn" data-act="inc" data-id="${c.itemId}">+</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    list.querySelectorAll('.qty-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const act = btn.getAttribute('data-act');
+        const idx = menuState.cart.findIndex(x => x.itemId === id);
+        if (idx === -1) return;
+        if (act === 'inc') menuState.cart[idx].qty++;
+        else {
+          menuState.cart[idx].qty--;
+          if (menuState.cart[idx].qty <= 0) menuState.cart.splice(idx, 1);
+        }
+        renderCart();
+      });
+    });
+
+    document.getElementById('grandTotalDisplay').textContent = formatMoney(subtotal);
+  }
+
+  // Send Order to POS / Pending
+  document.getElementById('sendOrderBtn').addEventListener('click', () => {
+    if (menuState.cart.length === 0) {
+      alert(t('alertEmptyCart'));
+      return;
+    }
+    const customerInput = document.getElementById('customerTableInput');
+    const customer = customerInput.value.trim();
+    if (!customer) {
+      alert(t('alertNoTable'));
+      customerInput.focus();
+      return;
+    }
+
+    const orderDate = document.getElementById('orderDateInput').value || todayStr;
+    
+    let subtotal = 0;
+    const cartMapped = menuState.cart.map(c => {
+      const it = menuState.items.find(i => i.id === c.itemId);
+      const unit = getUnitPrice(it);
+      subtotal += unit * c.qty;
+      return { itemId: c.itemId, qty: c.qty };
+    });
+
+    const newOrder = {
+      id: 'MENU-' + Math.floor(100 + Math.random() * 900),
+      customer,
+      date: orderDate,
+      currency: menuState.currency,
+      cart: cartMapped,
+      total: subtotal
+    };
+
+    try {
+      const pending = JSON.parse(localStorage.getItem('fp_pending') || '[]');
+      pending.unshift(newOrder);
+      localStorage.setItem('fp_pending', JSON.stringify(pending));
+      localStorage.setItem('freshly_premier_incoming_order', JSON.stringify(newOrder));
+    } catch(e) {}
+
+    alert(t('alertSuccess'));
+    menuState.cart = [];
+    customerInput.value = '';
+    renderCart();
+  });
+
+  // Controls
+  document.getElementById('langSelect').value = menuState.lang;
+  document.getElementById('langSelect').addEventListener('change', e => {
+    menuState.lang = e.target.value;
+    localStorage.setItem('fp_lang', menuState.lang);
+    applyTranslations();
+    renderCategories();
+    renderItems();
+    renderCart();
+  });
+
+  document.getElementById('currencySelect').value = menuState.currency;
+  document.getElementById('currencySelect').addEventListener('change', e => {
+    menuState.currency = e.target.value;
+    localStorage.setItem('fp_currency', menuState.currency);
+    renderItems();
+    renderCart();
+  });
+
+  document.getElementById('menuSearchInput').addEventListener('input', e => {
+    menuState.searchQuery = e.target.value;
+    renderItems();
+  });
+
+  // QR Modal
+  window.openQRModal = function() {
+    document.getElementById('qrModal').classList.add('open');
+    const qrDiv = document.getElementById('modalQrcode');
+    qrDiv.innerHTML = '';
+    new QRCode(qrDiv, {
+      text: window.location.href,
+      width: 170,
+      height: 170,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  }
+
+  window.closeQRModal = function() {
+    document.getElementById('qrModal').classList.remove('open');
+  }
+
+  renderLogos();
+  applyTranslations();
+  renderQRWidgets();
+  renderCategories();
+  renderItems();
+  renderCart();
+});
+</script>
+</body>
+</html>
